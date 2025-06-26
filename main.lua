@@ -504,7 +504,7 @@ function Kochess:openLoadPgnDialog()
                 self:updatePgnLog()
                 self:updateTimerDisplay()
                 self:updatePlayerDisplay()
-                UIManager:setDirty(self, "full")
+                UIManager:setDirty(self, "ui")
                 self.timer:start()
             end,
         }
@@ -746,7 +746,7 @@ function Kochess:resetGame()
 
     self.pgn_log:setText(_("New game.\nWhite to play."))
     self.board:updateBoard()
-    UIManager:setDirty(self, "full")
+    UIManager:setDirty(self, "ui")
 end
 
 --- Kochess:handleSaveFile(dialog, filename_input, current_dir)

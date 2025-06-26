@@ -9,7 +9,6 @@ local CenterContainer = require("ui/widget/container/centercontainer")
 local Chess = require("chess/src/chess")
 local Device = require("device")
 local Screen = Device.screen
-local UIManager = require("ui/uimanager")
 
 local BOARD_SIZE = 8
 local SELECTED_BORDER = 5
@@ -177,7 +176,6 @@ function Board:handleMove(from, to)
             logger.dbg(string.format("Illegal move attempted from %s to %s.", from, to), "ERROR")
             -- Re-render the board to revert any temporary visual changes for the illegal move
             self:updateBoard()
-            UIManager:setDirty(self, "ui")
         end
     end
 end
@@ -289,7 +287,6 @@ function Board:placePiece(square, piece, color)
     button:setIcon(icon, self.button_size)
     button.frame.background = Board.positionToColor(square) -- Re-apply background color in case it was changed
     button:refresh()
-    UIManager:setDirty(self, function() return "ui", self.dimen end)
 end
 
 --- Board:updateSquare(square)
@@ -324,7 +321,6 @@ function Board:updateBoard()
             end
         end
     end
-    UIManager:setDirty(self, "full") -- Request a full redraw after updating all squares
 end
 
 -- Utility functions for square conversions
