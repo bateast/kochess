@@ -139,12 +139,11 @@ function Kochess:startGame()
     self:initializeEngine()
     self:initializeBoard()
     self:buildUILayout()
-    -- self:registerHold() -- Re-enable if 'hold' functionality on PGN log is desired
+    -- -- self:registerHold() -- Re-enable if 'hold' functionality on PGN log is desired
     self:updateTimerDisplay()
     self:updatePlayerDisplay()
     self.board:updateBoard() -- Redraw the chess board
     UIManager:show(self) -- Show the main Kochess UI
-    UIManager:setDirty(self, "full") -- Request a full redraw
 end
 
 --- Kochess:initializeGameLogic()
@@ -249,7 +248,7 @@ function Kochess:initializeBoard()
         height = math.floor(0.7 * self.full_height), -- Calculate board height
         -- Callback for when any move (human or engine) has been executed and needs UI updates.
         moveCallback = function(move) self:onMoveExecuted(move) end,
-        holdCallback = function() UIManager:setDirty(self, "full") end,
+        holdCallback = nil,
         -- NEW: This callback is expected to be triggered by ChessBoard
         -- when a human pawn reaches the promotion rank, before game.move() is called.
         onPromotionNeeded = function(from_sq, to_sq, pawn_color)
@@ -710,7 +709,7 @@ function Kochess:updateTimerDisplay()
     local black_time = self.timer:getRemainingTime(Chess.BLACK)
     local player_indicator = getPlayerIndicator(self.running, self.game.turn())
     self.status_bar:setTitle(fmt(self.timer, white_time) .. player_indicator .. fmt(self.timer, black_time))
-    UIManager:setDirty(self.status_bar, "full") -- Request redraw for status bar
+    UIManager:setDirty(self.status_bar, "ui") -- Request redraw for status bar
 end
 
 --- Kochess:updatePlayerDisplay()
@@ -725,7 +724,7 @@ function Kochess:updatePlayerDisplay()
     end
     local player_indicator = getPlayerIndicator(self.running, self.game.turn())
     self.status_bar:setSubTitle(labelFor(Chess.WHITE) .. player_indicator .. labelFor(Chess.BLACK))
-    UIManager:setDirty(self.status_bar, "full")
+    UIManager:setDirty(self.status_bar, "ui")
 end
 
 --- Kochess:resetGame()
@@ -1040,9 +1039,8 @@ function Kochess:createTitleBar()
         end,
         close_callback = function()
             self.timer:stop() -- Stop the timer when closing
-            if self.engine and self.engine.state.uciok then
-                self:stopUCI()
-                self.engine.send("quit") -- Send quit command to engine before closing
+            if self.engine then
+                self.engine:stop()
             end
             UIManager:close(self) -- Close the Kochess UI
         end,
@@ -1077,7 +1075,6 @@ function Kochess:createStatusBar()
                     self.timer:reset()
                     self:updatePlayerDisplay()
                     self:updateTimerDisplay()
-                    UIManager:setDirty(self, "ui")
                 end,
                 onCancel = function()
                     -- optional cleanup

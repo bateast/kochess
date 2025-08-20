@@ -36,7 +36,6 @@ function Utils.pollingLoop(timeout, action, condition, delayed)
         if condition and condition() then
             UIManager:scheduleIn(timeout, loop)
         end
-
         action()
     end
 
@@ -84,6 +83,7 @@ function Utils.execInSubProcess(cmd, args, with_pipes, double_fork)
     argv[argc] = nil
     C.execvp(cmd, argv)
     io.stderr:write("execvp(", cmd, ") failed: ", ffi.string(C.strerror(C.errno)), "\n")
+    io.stderr:write("kill", "\n")
     C._exit(127)
   end
 

@@ -10,7 +10,9 @@ local function parse_uci_line(line, state)
   line = line:match("^%s*(.-)%s*$")
   local eng = state._engine
 
-  if line == "uciok" then
+  if line == "kill" then
+      state.to_uciok = -1
+  elseif line == "uciok" then
     state.uciok = true
     eng:_trigger("uciok")
   elseif line:find("^id name") then
@@ -144,6 +146,7 @@ function UCIEngine:uci()
   self.state.options = {}
   self.state.infos = {}
   self.state.uciok = false
+  self.state.to_uciok = 10
   self.state.readyok = false
   self.state._engine = self
 
@@ -151,7 +154,11 @@ function UCIEngine:uci()
 
   Utils.pollingLoop(1,
                     self._reader,
-                    function() return not self.state.uciok end)
+                    function()
+                        self.state.to_uciok = self.state.to_uciok - 1
+                        return not self.state.uciok and 0 < self.state.to_uciok
+                    end
+  )
 
 end
 
@@ -213,7 +220,15 @@ function UCIEngine:go(opts)
 
   Utils.pollingLoop(1,
                     self._reader,
-                    function() return not self.state.bestmove end)
+                    function() return not self.state.bestmove and 0 < self.state.to_uciok end)
+end
+
+function UCIEngine:stop()
+    if self.uciok then
+        self.send("stop")
+        self.send("quit") -- Send quit command to engine before closing
+    end
+    self.state.to_uciok = -1
 end
 
 M.UCIEngine = UCIEngine

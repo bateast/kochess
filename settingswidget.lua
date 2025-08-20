@@ -112,6 +112,7 @@ function SettingsWidget:show()
     -- Build the UI groups
     self:buildPlayerTypeGroup()
     self:buildEloGroup()
+
     self:buildTimeGroups()
     self:assembleContent()
 
@@ -309,6 +310,7 @@ end
 -- ============================================================================
 function SettingsWidget:assembleContent()
     local D = self.dialog
+    local empty = VerticalSpan:new{ width = 0 }
     local content = FrameContainer:new{
         radius     = Size.radius.window,
         bordersize = Size.border.window,
@@ -319,6 +321,7 @@ function SettingsWidget:assembleContent()
         VerticalGroup:new{
             align = "left",
             D.title_bar,
+
             VerticalSpan:new{ width = Size.padding.large },
 
             -- Player type only if engine is ready
@@ -327,7 +330,7 @@ function SettingsWidget:assembleContent()
                 self.playerSettingsGroup
             } or VerticalSpan:new{ width = 0 },
 
-            self.engine.state.uciok and VerticalSpan:new{ width = Size.padding.large } or nil,
+            self.engine.state.uciok and VerticalSpan:new{ width = Size.padding.large } or empty,
 
             -- ELO only if engine is ready
             self.engine.state.uciok and CenterContainer:new{
@@ -335,7 +338,7 @@ function SettingsWidget:assembleContent()
                 self.eloSettingsGroup
             } or VerticalSpan:new{ width = 0 },
 
-            self.engine.state.uciok and VerticalSpan:new{ width = Size.padding.large } or nil,
+            self.engine.state.uciok and VerticalSpan:new{ width = Size.padding.large } or empty,
 
             -- Time controls
             CenterContainer:new{
