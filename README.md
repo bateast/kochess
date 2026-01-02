@@ -19,13 +19,15 @@ Upon launching, a new game will begin automatically with the chess engine initia
 
 To install Kochess, follow these steps:
 
-1.    Plugin Installation: Copy the Kochess plugin directory into your KOReader installation. The plugin should be located at: `koreader/plugins/kochess.koplugin` (Replace koreader with your base KOReader installation directory).
+1.    Either download as ZIP (and unzip) or clone this repository by running ```git clone --recurse-submodules https://github.com/bateast/kochess.git```
 
-2.    Icons: For chess piece images to display correctly, the icons directory must be copied or moved to: `koreader/resources/icons/chess`
+2.    Plugin Installation: Copy the Kochess plugin directory into your KOReader installation. The plugin should be located at: `koreader/plugins/kochess.koplugin` (Replace koreader with your base KOReader installation directory).
 
-3.    Games: Your saved game files (PGN) can be stored in any convenient location on your device.
+3.    Icons: For chess piece images to display correctly, the icons directory must be copied or moved to: `koreader/resources/icons/chess`
 
-4.    Engine: Chess engine (`UCI` interface compatible) must be copied or moved as `koreader/resources/bin/stockfish`. This step is optional. Without a working installed chess engine, Kochess would still allow to play as human and load / save games for analysis.
+4.    Games: Your saved game files (PGN) can be stored in any convenient location on your device.
+
+5.    Engine: Chess engine (`UCI` interface compatible) must be copied or moved as `koreader/resources/bin/stockfish`. This step is optional. Without a working installed chess engine, Kochess would still allow to play as human and load / save games for analysis.
 
 ---
 
