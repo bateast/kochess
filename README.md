@@ -21,7 +21,7 @@ To install Kochess, follow these steps:
 
 1.    Plugin Installation: Copy the Kochess plugin directory into your KOReader installation. The plugin should be located at: `koreader/plugins/kochess.koplugin` (Replace koreader with your base KOReader installation directory).
 
-2.    Icons: For chess piece images to display correctly, the icons directory must be copied or moved to: `koreader/resources/icons/chess`
+2.    Icons: For chess piece images to display correctly, the files in the icons directory must be copied or moved to: `koreader/resources/icons/chess`
 
 3.    Games: Your saved game files (PGN) can be stored in any convenient location on your device.
 
